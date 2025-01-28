@@ -10,7 +10,7 @@ const Footer = () => {
     <Box
       padding={'20px'}
       sx={{
-        backgroundColor: 'primary.main', // Asosiy rang
+        backgroundColor: '#141414', // Asosiy rang
         color: 'primary.contrastText',   // Kontrast matn rangi
         borderTop: '1px solid #e0e0e0',
         textAlign: 'center',

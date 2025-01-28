@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../layout';
-import { Button } from '@mui/material';
+import { Hero } from '../components';
+
 
 export const metadata = {
   title: 'Zoyidjon App',
@@ -11,7 +12,7 @@ export const metadata = {
 const IndexPage = () => {
   return (
     <Layout>
-      <Button>Click</Button>
+      <Hero />
     </Layout>
   )
 }

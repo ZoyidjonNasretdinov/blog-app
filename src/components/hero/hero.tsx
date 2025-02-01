@@ -1,29 +1,25 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Avatar, Button } from "@mui/material";
+import { Box, Typography, Avatar, Button, useMediaQuery } from "@mui/material";
 import { format } from "date-fns";
 import { data } from "@/src/config/constants";
-
-
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // O'ngga siljitish
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
-  };
+  // Ekran o'lchamini tekshirish
+  const isSmallScreen = useMediaQuery("(max-width:600px)"); // xs
+  const isMediumScreen = useMediaQuery("(max-width:960px)"); // md
 
-  // Chapga siljitish
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
-  };
+  // Slayderni o'zgartirish
+  const nextSlide = () => setCurrentIndex((prev) => (prev === data.length - 1 ? 0 : prev + 1));
+  const prevSlide = () => setCurrentIndex((prev) => (prev === 0 ? data.length - 1 : prev - 1));
 
-  // Avtomatik aylanish
+  // Avtomatik slayder
   useEffect(() => {
-    const interval = setInterval(nextSlide, 3000); // Har 3 sekundda almashadi
-    return () => clearInterval(interval); // Tozalash
+    const interval = setInterval(nextSlide, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -31,7 +27,7 @@ const Hero = () => {
       sx={{
         position: "relative",
         width: "100%",
-        height: "70vh",
+        height: isSmallScreen ? "50vh" : "70vh",
         overflow: "hidden",
       }}
     >
@@ -50,7 +46,7 @@ const Hero = () => {
               width: "100%",
               flexShrink: 0,
               position: "relative",
-              height: "70vh",
+              height: isSmallScreen ? "50vh" : "70vh",
             }}
           >
             <img
@@ -69,7 +65,7 @@ const Hero = () => {
                 left: 0,
                 right: 0,
                 bottom: 0,
-                backgroundColor: "rgba(0,0,0,0.6)",
+                backgroundColor: "rgba(0,0,0,0.6)", // Matnni ajratish uchun qora fon
               }}
             />
             <Box
@@ -77,18 +73,26 @@ const Hero = () => {
                 position: "absolute",
                 top: "50%",
                 transform: "translateY(-50%)",
-                left: "20px",
-                color: "white",
+                left: isSmallScreen ? "10px" : "20px",
+                right: isSmallScreen ? "10px" : "auto",
+                textAlign: isSmallScreen ? "center" : "left",
+                color: "white", // Matn rangi oq
                 zIndex: 999,
               }}
             >
-              <Typography variant="h2">{item.title}</Typography>
-              <Typography variant="h5">{item.exerpt}</Typography>
-              <Box sx={{ display: "flex", alignItems: "center", marginTop: "20px" }}>
-                <Avatar alt={item.author.name} src={item.author.image} />
+              <Typography variant={isSmallScreen ? "h5" : isMediumScreen ? "h4" : "h2"} sx={{ color: "white" }}>
+                {item.title}
+              </Typography>
+              <Typography variant={isSmallScreen ? "body2" : "h5"} sx={{ color: "white" }}>
+                {item.exerpt}
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
+                <Avatar alt={item.author.name} src={item.author.image} sx={{ width: isSmallScreen ? 30 : 40, height: isSmallScreen ? 30 : 40 }} />
                 <Box sx={{ marginLeft: "10px" }}>
-                  <Typography>{item.author.name}</Typography>
-                  <Typography>
+                  <Typography variant={isSmallScreen ? "body2" : "body1"} sx={{ color: "white" }}>
+                    {item.author.name}
+                  </Typography>
+                  <Typography variant={isSmallScreen ? "caption" : "body2"} sx={{ color: "white" }}>
                     {format(new Date(), "dd MMM, yyyy")} • 10min read
                   </Typography>
                 </Box>
@@ -98,7 +102,7 @@ const Hero = () => {
         ))}
       </Box>
 
-      {/* Chapga va o'ngga o'tkazish tugmalari */}
+      {/* Tugmalar */}
       <Button
         onClick={prevSlide}
         sx={{
@@ -106,10 +110,12 @@ const Hero = () => {
           top: "50%",
           left: "10px",
           transform: "translateY(-50%)",
-          backgroundColor: "rgba(255,255,255,0.5)",
-          color: "black",
-          fontSize: "24px",
-          "&:hover": { backgroundColor: "rgba(255,255,255,0.8)" },
+          backgroundColor: "rgba(255,255,255,0.3)",
+          color: "white",
+          fontSize: isSmallScreen ? "16px" : "24px",
+          minWidth: isSmallScreen ? "30px" : "40px",
+          height: isSmallScreen ? "30px" : "40px",
+          "&:hover": { backgroundColor: "rgba(255,255,255,0.5)" },
         }}
       >
         ‹
@@ -121,24 +127,26 @@ const Hero = () => {
           top: "50%",
           right: "10px",
           transform: "translateY(-50%)",
-          backgroundColor: "rgba(255,255,255,0.5)",
-          color: "black",
-          fontSize: "24px",
-          "&:hover": { backgroundColor: "rgba(255,255,255,0.8)" },
+          backgroundColor: "rgba(255,255,255,0.3)",
+          color: "white",
+          fontSize: isSmallScreen ? "16px" : "24px",
+          minWidth: isSmallScreen ? "30px" : "40px",
+          height: isSmallScreen ? "30px" : "40px",
+          "&:hover": { backgroundColor: "rgba(255,255,255,0.5)" },
         }}
       >
         ›
       </Button>
 
-      {/* Indikatorlar (dots) */}
+      {/* Indikatorlar */}
       <Box
         sx={{
           position: "absolute",
-          bottom: "20px",
+          bottom: "10px",
           left: "50%",
           transform: "translateX(-50%)",
           display: "flex",
-          gap: "10px",
+          gap: isSmallScreen ? "5px" : "10px",
         }}
       >
         {data.map((_, index) => (
@@ -146,10 +154,10 @@ const Hero = () => {
             key={index}
             onClick={() => setCurrentIndex(index)}
             sx={{
-              width: "12px",
-              height: "12px",
+              width: isSmallScreen ? "8px" : "12px",
+              height: isSmallScreen ? "8px" : "12px",
               borderRadius: "50%",
-              backgroundColor: index === currentIndex ? "white" : "gray",
+              backgroundColor: index === currentIndex ? "white" : "rgba(255,255,255,0.5)",
               cursor: "pointer",
               transition: "background 0.3s",
             }}

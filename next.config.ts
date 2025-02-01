@@ -6,6 +6,9 @@ const nextConfig = {
   compiler: {
     emotion: true, // Emotion ni qo'llab-quvvatlash
   },
+  images: {
+    domains: ['via.placeholder.com'], // Rasm domenini qo'shish
+  },
 };
 
 module.exports = nextConfig;

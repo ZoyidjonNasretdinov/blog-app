@@ -1,6 +1,8 @@
 import { request, gql } from 'graphql-request'
+import { BlogsType } from '../interface/blogs.interface';
 
 const graphqlAPI = process.env.NEXT_PUBLIC_HYGRAPH_ENDPOINT as string;
+const token = process.env.NEXT_PUBLIC_HYGRAPH_TOKEN as string;
 
 export const BlogsServices = {
   async getAllBlogs() {
@@ -29,11 +31,13 @@ export const BlogsServices = {
     `
 
     try {
-      const data = await request(graphqlAPI, query) // Fixed the variable name here
-      return data.blogs
+      const data = await request<{ blogs: BlogsType[] }>(graphqlAPI, query, {}, {
+        Authorization: `Bearer ${token}`,  // 👈 API token qo'shildi
+      });
+      return data.blogs;
     } catch (error) {
-      console.error('Error fetching blogs:', error)
-      return []
+      console.error("GraphQL Request Error:", error);
+      return [];
     }
   }
 }
